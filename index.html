@@ -355,27 +355,34 @@
                 <div id="weaponSelection">
                     <h3>Choose Your Weapon:</h3>
                     <div class="weapon-grid">
-                        <div class="weapon-card" onclick="selectWeapon('sword')" style="cursor: pointer;">
+                        <div class="weapon-card" onclick="window.selectWeapon('sword'); return false;" onmousedown="window.selectWeapon('sword'); return false;" data-weapon="sword" style="cursor: pointer;">
                             <h4>⚔️ Sword</h4>
                             <p>High damage, short range melee</p>
                             <small>Damage: 35 | Range: 80 | Rate: Fast</small>
                         </div>
-                        <div class="weapon-card" onclick="selectWeapon('bow')" style="cursor: pointer;">
+                        <div class="weapon-card" onclick="window.selectWeapon('bow'); return false;" onmousedown="window.selectWeapon('bow'); return false;" data-weapon="bow" style="cursor: pointer;">
                             <h4>🏹 Bow</h4>
                             <p>Balanced ranged weapon</p>
                             <small>Damage: 25 | Range: 250 | Rate: Medium</small>
                         </div>
-                        <div class="weapon-card" onclick="selectWeapon('staff')" style="cursor: pointer;">
+                        <div class="weapon-card" onclick="window.selectWeapon('staff'); return false;" onmousedown="window.selectWeapon('staff'); return false;" data-weapon="staff" style="cursor: pointer;">
                             <h4>🔮 Magic Staff</h4>
                             <p>Fast casting, magical projectiles</p>
                             <small>Damage: 20 | Range: 200 | Rate: Very Fast</small>
                         </div>
-                        <div class="weapon-card" onclick="selectWeapon('cannon')" style="cursor: pointer;">
+                        <div class="weapon-card" onclick="window.selectWeapon('cannon'); return false;" onmousedown="window.selectWeapon('cannon'); return false;" data-weapon="cannon" style="cursor: pointer;">
                             <h4>💥 Plasma Cannon</h4>
                             <p>Slow but devastating energy weapon</p>
                             <small>Damage: 45 | Range: 300 | Rate: Slow</small>
                         </div>
                     </div>
+                </div>
+                
+                <!-- Debug section for GitHub Pages troubleshooting -->
+                <div style="margin-top: 20px; padding: 10px; background: #333; border-radius: 5px; font-size: 12px;">
+                    <p>Debug: If weapons don't work, try these:</p>
+                    <button onclick="window.testWeaponSelection()" style="margin: 2px; padding: 5px; background: #555; color: white; border: 1px solid #777;">Test Bow</button>
+                    <button onclick="console.log('Functions available:', typeof window.selectWeapon, typeof window.startGame)" style="margin: 2px; padding: 5px; background: #555; color: white; border: 1px solid #777;">Check Functions</button>
                 </div>
 
             </div>
