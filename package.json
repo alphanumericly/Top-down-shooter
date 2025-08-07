@@ -1,0 +1,21 @@
+{
+  "name": "top-down-shooter",
+  "version": "1.0.0",
+  "description": "A top-down shooter game with upgrade mechanics",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "dev": "python3 -m http.server 8000"
+  },
+  "keywords": [
+    "game",
+    "shooter",
+    "upgrades",
+    "javascript",
+    "canvas"
+  ],
+  "author": "Game Developer",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+}
