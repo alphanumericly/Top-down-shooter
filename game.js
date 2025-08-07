@@ -408,14 +408,27 @@ function init() {
 // Simple weapon selection - starts game immediately
 function selectWeapon(weaponKey) {
     console.log('Weapon selected:', weaponKey);
+    
+    // Validate weapon exists
+    if (!weaponTypes[weaponKey]) {
+        console.error('Invalid weapon:', weaponKey);
+        alert('Invalid weapon selection. Please try again.');
+        return;
+    }
+    
     selectedWeapon = weaponKey;
     
     // Start the game immediately
     startGame();
 }
 
-// Make it globally accessible
+// Make it globally accessible immediately
 window.selectWeapon = selectWeapon;
+
+// Also ensure it's available as soon as script loads
+if (typeof window !== 'undefined') {
+    window.selectWeapon = selectWeapon;
+}
 
 
 
@@ -482,10 +495,10 @@ function updateStatsPanel() {
     // Update weapon info
     const weaponData = weaponTypes[selectedWeapon];
     const weaponNames = {
-        sword: '⚔️ Sword',
-        bow: '🏹 Bow', 
-        staff: '🔮 Magic Staff',
-        cannon: '💥 Plasma Cannon'
+        sword: 'âš”ï¸ Sword',
+        bow: 'ðŸ¹ Bow', 
+        staff: 'ðŸ”® Magic Staff',
+        cannon: 'ðŸ’¥ Plasma Cannon'
     };
     
     document.getElementById('weaponName').textContent = weaponNames[selectedWeapon] || 'Unknown';
@@ -604,16 +617,16 @@ function updateActiveEffectsDisplay() {
         
         // Get effect display name
         const effectNames = {
-            healing: '💚 Regeneration',
-            shield: '🛡️ Energy Shield',
-            vampiric: '🧛 Vampiric Aura',
-            berserker: '🔥 Berserker Rage',
-            piercing: '🎯 Piercing Arrow',
-            mana: '⚡ Mana Surge',
-            laser: '🔴 Laser Cannon',
-            overcharge: '⚡ Overcharge',
-            shockwave: '🌊 Shockwave',
-            spiritBlades: '⚔️ Spirit Blades'
+            healing: 'ðŸ’š Regeneration',
+            shield: 'ðŸ›¡ï¸ Energy Shield',
+            vampiric: 'ðŸ§› Vampiric Aura',
+            berserker: 'ðŸ”¥ Berserker Rage',
+            piercing: 'ðŸŽ¯ Piercing Arrow',
+            mana: 'âš¡ Mana Surge',
+            laser: 'ðŸ”´ Laser Cannon',
+            overcharge: 'âš¡ Overcharge',
+            shockwave: 'ðŸŒŠ Shockwave',
+            spiritBlades: 'âš”ï¸ Spirit Blades'
         };
         nameSpan.textContent = effectNames[effect.type] || effect.type;
         
@@ -1668,11 +1681,11 @@ function render() {
             ctx.fillStyle = '#8800ff';
             ctx.font = '12px Arial';
             ctx.textAlign = 'center';
-            if (enemy.ability === 'shield') ctx.fillText('🛡️', enemy.x, enemy.y - enemy.radius - 8);
-            else if (enemy.ability === 'dash') ctx.fillText('⚡', enemy.x, enemy.y - enemy.radius - 8);
-            else if (enemy.ability === 'heal') ctx.fillText('❤️', enemy.x, enemy.y - enemy.radius - 8);
-            else if (enemy.ability === 'teleport') ctx.fillText('🌀', enemy.x, enemy.y - enemy.radius - 8);
-            else if (enemy.ability === 'burst') ctx.fillText('💥', enemy.x, enemy.y - enemy.radius - 8);
+            if (enemy.ability === 'shield') ctx.fillText('ðŸ›¡ï¸', enemy.x, enemy.y - enemy.radius - 8);
+            else if (enemy.ability === 'dash') ctx.fillText('âš¡', enemy.x, enemy.y - enemy.radius - 8);
+            else if (enemy.ability === 'heal') ctx.fillText('â¤ï¸', enemy.x, enemy.y - enemy.radius - 8);
+            else if (enemy.ability === 'teleport') ctx.fillText('ðŸŒ€', enemy.x, enemy.y - enemy.radius - 8);
+            else if (enemy.ability === 'burst') ctx.fillText('ðŸ’¥', enemy.x, enemy.y - enemy.radius - 8);
         } else if (enemy.type === 'ai') {
             // AI indicator - small triangular points
             ctx.fillStyle = '#00ff88';
@@ -2725,7 +2738,7 @@ function getStatDescription(type, currentLevel, system) {
             break;
     }
     
-    return `${currentValue}${unit} → ${nextValue}${unit}`;
+    return `${currentValue}${unit} â†’ ${nextValue}${unit}`;
 }
 
 // Get detailed ability description with stats
@@ -2739,81 +2752,81 @@ function getAbilityDescription(abilityKey, currentLevel, abilityData) {
         // Add specific stats based on ability
         if (abilityData.damage) {
             const damage = Array.isArray(abilityData.damage) ? abilityData.damage[currentLevel - 1] : abilityData.damage;
-            description += `• Damage: ${damage}\n`;
+            description += `â€¢ Damage: ${damage}\n`;
         }
         if (abilityData.range) {
-            description += `• Range: ${abilityData.range}\n`;
+            description += `â€¢ Range: ${abilityData.range}\n`;
         }
         if (abilityData.cooldown) {
             const cooldown = Array.isArray(abilityData.cooldown) ? abilityData.cooldown[currentLevel - 1] : abilityData.cooldown;
-            description += `• Cooldown: ${(cooldown / 1000).toFixed(1)}s\n`;
+            description += `â€¢ Cooldown: ${(cooldown / 1000).toFixed(1)}s\n`;
         }
         if (abilityData.duration) {
             const duration = Array.isArray(abilityData.duration) ? abilityData.duration[currentLevel - 1] : abilityData.duration;
-            description += `• Duration: ${(duration / 1000).toFixed(1)}s\n`;
+            description += `â€¢ Duration: ${(duration / 1000).toFixed(1)}s\n`;
         }
         if (abilityData.healAmount) {
             const heal = Array.isArray(abilityData.healAmount) ? abilityData.healAmount[currentLevel - 1] : abilityData.healAmount;
-            description += `• Heal: ${heal} HP/s\n`;
+            description += `â€¢ Heal: ${heal} HP/s\n`;
         }
         if (abilityData.shieldAmount) {
             const shield = Array.isArray(abilityData.shieldAmount) ? abilityData.shieldAmount[currentLevel - 1] : abilityData.shieldAmount;
-            description += `• Shield: ${shield} HP\n`;
+            description += `â€¢ Shield: ${shield} HP\n`;
         }
         if (abilityData.chains) {
             const chains = Array.isArray(abilityData.chains) ? abilityData.chains[currentLevel - 1] : abilityData.chains;
-            description += `• Chain Jumps: ${chains}\n`;
+            description += `â€¢ Chain Jumps: ${chains}\n`;
         }
         if (abilityData.extraArrows) {
             const arrows = Array.isArray(abilityData.extraArrows) ? abilityData.extraArrows[currentLevel - 1] : abilityData.extraArrows;
-            description += `• Extra Arrows: ${arrows}\n`;
+            description += `â€¢ Extra Arrows: ${arrows}\n`;
         }
         if (abilityData.explosionRadius) {
             const radius = Array.isArray(abilityData.explosionRadius) ? abilityData.explosionRadius[currentLevel - 1] : abilityData.explosionRadius;
-            description += `• Explosion Radius: ${radius}\n`;
+            description += `â€¢ Explosion Radius: ${radius}\n`;
         }
         if (abilityData.slowFactor) {
             const factor = Array.isArray(abilityData.slowFactor) ? abilityData.slowFactor[currentLevel - 1] : abilityData.slowFactor;
-            description += `• Slow Factor: ${(factor * 100).toFixed(0)}%\n`;
+            description += `â€¢ Slow Factor: ${(factor * 100).toFixed(0)}%\n`;
         }
         if (abilityData.freezeDuration) {
             const freeze = Array.isArray(abilityData.freezeDuration) ? abilityData.freezeDuration[currentLevel - 1] : abilityData.freezeDuration;
-            description += `• Freeze Duration: ${(freeze / 1000).toFixed(1)}s\n`;
+            description += `â€¢ Freeze Duration: ${(freeze / 1000).toFixed(1)}s\n`;
         }
         if (abilityData.lifeSteal) {
             const steal = Array.isArray(abilityData.lifeSteal) ? abilityData.lifeSteal[currentLevel - 1] : abilityData.lifeSteal;
-            description += `• Life Steal: ${(steal * 100).toFixed(0)}%\n`;
+            description += `â€¢ Life Steal: ${(steal * 100).toFixed(0)}%\n`;
         }
         if (abilityData.meteorCount) {
             const meteors = Array.isArray(abilityData.meteorCount) ? abilityData.meteorCount[currentLevel - 1] : abilityData.meteorCount;
-            description += `• Meteors: ${meteors}\n`;
+            description += `â€¢ Meteors: ${meteors}\n`;
         }
         if (abilityData.healPerSecond) {
             const heal = Array.isArray(abilityData.healPerSecond) ? abilityData.healPerSecond[currentLevel - 1] : abilityData.healPerSecond;
-            description += `• Healing: ${heal} HP/s\n`;
+            description += `â€¢ Healing: ${heal} HP/s\n`;
         }
         if (abilityData.absorption) {
             const absorb = Array.isArray(abilityData.absorption) ? abilityData.absorption[currentLevel - 1] : abilityData.absorption;
-            description += `• Shield Strength: ${absorb} HP\n`;
+            description += `â€¢ Shield Strength: ${absorb} HP\n`;
         }
         if (abilityData.damageBonus) {
             const bonus = Array.isArray(abilityData.damageBonus) ? abilityData.damageBonus[currentLevel - 1] : abilityData.damageBonus;
-            description += `• Damage Bonus: +${(bonus * 100).toFixed(0)}%\n`;
+            description += `â€¢ Damage Bonus: +${(bonus * 100).toFixed(0)}%\n`;
         }
         if (abilityData.speedBonus) {
             const speed = Array.isArray(abilityData.speedBonus) ? abilityData.speedBonus[currentLevel - 1] : abilityData.speedBonus;
-            description += `• Attack Speed: +${(speed * 100).toFixed(0)}%\n`;
+            description += `â€¢ Attack Speed: +${(speed * 100).toFixed(0)}%\n`;
         }
         if (abilityData.killsRequired) {
             const kills = Array.isArray(abilityData.killsRequired) ? abilityData.killsRequired[currentLevel - 1] : abilityData.killsRequired;
-            description += `• Kill Streak Required: ${kills}\n`;
+            description += `â€¢ Kill Streak Required: ${kills}\n`;
         }
         if (abilityData.enemiesRequired) {
             const enemies = Array.isArray(abilityData.enemiesRequired) ? abilityData.enemiesRequired[currentLevel - 1] : abilityData.enemiesRequired;
-            description += `• Enemies Required: ${enemies} within ${abilityData.triggerRange}px\n`;
+            description += `â€¢ Enemies Required: ${enemies} within ${abilityData.triggerRange}px\n`;
         }
         if (abilityData.triggerRange) {
-            description += `• Trigger Range: ${abilityData.triggerRange}px\n`;
+            description += `â€¢ Trigger Range: ${abilityData.triggerRange}px\n`;
         }
     }
     
@@ -2824,77 +2837,77 @@ function getAbilityDescription(abilityKey, currentLevel, abilityData) {
         if (abilityData.damage && Array.isArray(abilityData.damage)) {
             const currentDmg = currentLevel > 0 ? abilityData.damage[currentLevel - 1] : 0;
             const nextDmg = abilityData.damage[currentLevel];
-            description += `• Damage: ${currentDmg} → ${nextDmg}\n`;
+            description += `â€¢ Damage: ${currentDmg} â†’ ${nextDmg}\n`;
         }
         if (abilityData.duration && Array.isArray(abilityData.duration)) {
             const currentDur = currentLevel > 0 ? abilityData.duration[currentLevel - 1] : 0;
             const nextDur = abilityData.duration[currentLevel];
-            description += `• Duration: ${(currentDur / 1000).toFixed(1)}s → ${(nextDur / 1000).toFixed(1)}s\n`;
+            description += `â€¢ Duration: ${(currentDur / 1000).toFixed(1)}s â†’ ${(nextDur / 1000).toFixed(1)}s\n`;
         }
         if (abilityData.healAmount && Array.isArray(abilityData.healAmount)) {
             const currentHeal = currentLevel > 0 ? abilityData.healAmount[currentLevel - 1] : 0;
             const nextHeal = abilityData.healAmount[currentLevel];
-            description += `• Heal: ${currentHeal} → ${nextHeal} HP/s\n`;
+            description += `â€¢ Heal: ${currentHeal} â†’ ${nextHeal} HP/s\n`;
         }
         if (abilityData.shieldAmount && Array.isArray(abilityData.shieldAmount)) {
             const currentShield = currentLevel > 0 ? abilityData.shieldAmount[currentLevel - 1] : 0;
             const nextShield = abilityData.shieldAmount[currentLevel];
-            description += `• Shield: ${currentShield} → ${nextShield} HP\n`;
+            description += `â€¢ Shield: ${currentShield} â†’ ${nextShield} HP\n`;
         }
         if (abilityData.chains && Array.isArray(abilityData.chains)) {
             const currentChains = currentLevel > 0 ? abilityData.chains[currentLevel - 1] : 0;
             const nextChains = abilityData.chains[currentLevel];
-            description += `• Chain Jumps: ${currentChains} → ${nextChains}\n`;
+            description += `â€¢ Chain Jumps: ${currentChains} â†’ ${nextChains}\n`;
         }
         if (abilityData.extraArrows && Array.isArray(abilityData.extraArrows)) {
             const currentArrows = currentLevel > 0 ? abilityData.extraArrows[currentLevel - 1] : 0;
             const nextArrows = abilityData.extraArrows[currentLevel];
-            description += `• Extra Arrows: ${currentArrows} → ${nextArrows}\n`;
+            description += `â€¢ Extra Arrows: ${currentArrows} â†’ ${nextArrows}\n`;
         }
         if (abilityData.explosionRadius && Array.isArray(abilityData.explosionRadius)) {
             const currentRadius = currentLevel > 0 ? abilityData.explosionRadius[currentLevel - 1] : 0;
             const nextRadius = abilityData.explosionRadius[currentLevel];
-            description += `• Explosion Radius: ${currentRadius} → ${nextRadius}\n`;
+            description += `â€¢ Explosion Radius: ${currentRadius} â†’ ${nextRadius}\n`;
         }
         if (abilityData.freezeDuration && Array.isArray(abilityData.freezeDuration)) {
             const currentFreeze = currentLevel > 0 ? abilityData.freezeDuration[currentLevel - 1] : 0;
             const nextFreeze = abilityData.freezeDuration[currentLevel];
-            description += `• Freeze Duration: ${(currentFreeze / 1000).toFixed(1)}s → ${(nextFreeze / 1000).toFixed(1)}s\n`;
+            description += `â€¢ Freeze Duration: ${(currentFreeze / 1000).toFixed(1)}s â†’ ${(nextFreeze / 1000).toFixed(1)}s\n`;
         }
         if (abilityData.lifeSteal && Array.isArray(abilityData.lifeSteal)) {
             const currentSteal = currentLevel > 0 ? abilityData.lifeSteal[currentLevel - 1] : 0;
             const nextSteal = abilityData.lifeSteal[currentLevel];
-            description += `• Life Steal: ${(currentSteal * 100).toFixed(0)}% → ${(nextSteal * 100).toFixed(0)}%\n`;
+            description += `â€¢ Life Steal: ${(currentSteal * 100).toFixed(0)}% â†’ ${(nextSteal * 100).toFixed(0)}%\n`;
         }
         if (abilityData.meteorCount && Array.isArray(abilityData.meteorCount)) {
             const currentMeteors = currentLevel > 0 ? abilityData.meteorCount[currentLevel - 1] : 0;
             const nextMeteors = abilityData.meteorCount[currentLevel];
-            description += `• Meteors: ${currentMeteors} → ${nextMeteors}\n`;
+            description += `â€¢ Meteors: ${currentMeteors} â†’ ${nextMeteors}\n`;
         }
         if (abilityData.healPerSecond && Array.isArray(abilityData.healPerSecond)) {
             const currentHeal = currentLevel > 0 ? abilityData.healPerSecond[currentLevel - 1] : 0;
             const nextHeal = abilityData.healPerSecond[currentLevel];
-            description += `• Healing: ${currentHeal} → ${nextHeal} HP/s\n`;
+            description += `â€¢ Healing: ${currentHeal} â†’ ${nextHeal} HP/s\n`;
         }
         if (abilityData.absorption && Array.isArray(abilityData.absorption)) {
             const currentAbsorb = currentLevel > 0 ? abilityData.absorption[currentLevel - 1] : 0;
             const nextAbsorb = abilityData.absorption[currentLevel];
-            description += `• Shield Strength: ${currentAbsorb} → ${nextAbsorb} HP\n`;
+            description += `â€¢ Shield Strength: ${currentAbsorb} â†’ ${nextAbsorb} HP\n`;
         }
         if (abilityData.range && Array.isArray(abilityData.range)) {
             const currentRange = currentLevel > 0 ? abilityData.range[currentLevel - 1] : 0;
             const nextRange = abilityData.range[currentLevel];
-            description += `• Range: ${currentRange} → ${nextRange}\n`;
+            description += `â€¢ Range: ${currentRange} â†’ ${nextRange}\n`;
         }
         if (abilityData.enemiesRequired && Array.isArray(abilityData.enemiesRequired)) {
             const currentEnemies = currentLevel > 0 ? abilityData.enemiesRequired[currentLevel - 1] : 0;
             const nextEnemies = abilityData.enemiesRequired[currentLevel];
-            description += `• Enemies Required: ${currentEnemies} → ${nextEnemies}\n`;
+            description += `â€¢ Enemies Required: ${currentEnemies} â†’ ${nextEnemies}\n`;
         }
         if (abilityData.cooldown && Array.isArray(abilityData.cooldown)) {
             const currentCooldown = currentLevel > 0 ? abilityData.cooldown[currentLevel - 1] : 0;
             const nextCooldown = abilityData.cooldown[currentLevel];
-            description += `• Cooldown: ${(currentCooldown / 1000).toFixed(1)}s → ${(nextCooldown / 1000).toFixed(1)}s\n`;
+            description += `â€¢ Cooldown: ${(currentCooldown / 1000).toFixed(1)}s â†’ ${(nextCooldown / 1000).toFixed(1)}s\n`;
         }
     }
     
@@ -3011,9 +3024,9 @@ function renderUpgradeMenu() {
     let cardsHTML = '<h2>Level ' + level + ' - Choose an Upgrade!</h2><div style="display: flex; justify-content: space-around; margin: 20px 0;">';
     
     upgradeCards.forEach((card, index) => {
-        const progressBar = '■'.repeat(card.currentLevel) + '□'.repeat(card.maxLevel - card.currentLevel);
+        const progressBar = 'â– '.repeat(card.currentLevel) + 'â–¡'.repeat(card.maxLevel - card.currentLevel);
         const borderColor = card.category === 'ability' ? '#ff9900' : '#00ffff';
-        const categoryLabel = card.category === 'ability' ? (card.isWeaponSpecific ? '⚔️ Weapon' : '🔮 General') : '📊 Stat';
+        const categoryLabel = card.category === 'ability' ? (card.isWeaponSpecific ? 'âš”ï¸ Weapon' : 'ðŸ”® General') : 'ðŸ“Š Stat';
         
         cardsHTML += `
             <div style="
@@ -4041,7 +4054,7 @@ function updateVisualEffects() {
                         const enemy = enemies[j];
                         const distance = Math.sqrt((effect.x - enemy.x) ** 2 + (effect.y - enemy.y) ** 2);
                         
-                        // Hit if enemy is within the wave ring (current radius ± 10 pixels)
+                        // Hit if enemy is within the wave ring (current radius Â± 10 pixels)
                         if (Math.abs(distance - effect.currentRadius) <= 15 && !enemy.hitByShockwave) {
                             enemy.health -= effect.damage;
                             enemy.damageFlash = enemy.damageFlashDuration;
@@ -4378,21 +4391,56 @@ function gameOver() {
     console.log('Game Over!'); // Explicitly log game over
 }
 
-// Initialize when page loads
-window.addEventListener('load', () => {
+// Ensure functions are available immediately
+window.selectWeapon = selectWeapon;
+
+// Initialize when page loads - multiple fallbacks for GitHub Pages
+function initializeGame() {
     console.log('Game loading...');
     init();
     
     // Add event listeners as backup to onclick
     setTimeout(() => {
         const weaponCards = document.querySelectorAll('.weapon-card');
+        console.log('Found weapon cards:', weaponCards.length);
+        
         weaponCards.forEach((card, index) => {
             const weapons = ['sword', 'bow', 'staff', 'cannon'];
             const weapon = weapons[index];
             
-            card.addEventListener('click', (e) => {
+            // Remove existing listeners first
+            card.replaceWith(card.cloneNode(true));
+            const newCard = document.querySelectorAll('.weapon-card')[index];
+            
+            newCard.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Card clicked for weapon:', weapon);
+                selectWeapon(weapon);
+            });
+            
+            // Also add mousedown as backup
+            newCard.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                console.log('Card mousedown for weapon:', weapon);
                 selectWeapon(weapon);
             });
         });
-    }, 500);
-}); 
+    }, 100);
+}
+
+// Multiple initialization approaches for better compatibility
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeGame);
+} else {
+    initializeGame();
+}
+
+window.addEventListener('load', initializeGame);
+
+// Debug function to test weapon selection manually
+window.testWeaponSelection = function() {
+    console.log('Testing weapon selection...');
+    console.log('selectWeapon function available:', typeof window.selectWeapon);
+    selectWeapon('bow');
+}; 
