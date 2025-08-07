@@ -334,7 +334,6 @@
                 </div>
             </div>
         </div>
-        
         <div id="ui">
             <div>Health: <span id="health">100</span></div>
             <div>Score: <span id="score">0</span></div>
@@ -378,11 +377,19 @@
                     </div>
                 </div>
                 
-                <!-- Debug section for GitHub Pages troubleshooting -->
-                <div style="margin-top: 20px; padding: 10px; background: #333; border-radius: 5px; font-size: 12px;">
-                    <p>Debug: If weapons don't work, try these:</p>
-                    <button onclick="window.testWeaponSelection()" style="margin: 2px; padding: 5px; background: #555; color: white; border: 1px solid #777;">Test Bow</button>
-                    <button onclick="console.log('Functions available:', typeof window.selectWeapon, typeof window.startGame)" style="margin: 2px; padding: 5px; background: #555; color: white; border: 1px solid #777;">Check Functions</button>
+                <!-- Fallback weapon buttons if clicking doesn't work -->
+                <div style="margin-top: 20px; padding: 15px; background: #333; border-radius: 5px;">
+                    <h4 style="margin-top: 0; color: #ffff00;">Backup Weapon Selection:</h4>
+                    <p style="font-size: 12px; color: #aaa;">If the cards above don't work, use these buttons:</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                        <button id="fallback-sword" style="padding: 10px; background: #444; color: white; border: 2px solid #666; border-radius: 5px; cursor: pointer;">⚔️ Sword</button>
+                        <button id="fallback-bow" style="padding: 10px; background: #444; color: white; border: 2px solid #666; border-radius: 5px; cursor: pointer;">🏹 Bow</button>
+                        <button id="fallback-staff" style="padding: 10px; background: #444; color: white; border: 2px solid #666; border-radius: 5px; cursor: pointer;">🔮 Staff</button>
+                        <button id="fallback-cannon" style="padding: 10px; background: #444; color: white; border: 2px solid #666; border-radius: 5px; cursor: pointer;">💥 Cannon</button>
+                    </div>
+                    <div style="margin-top: 10px; font-size: 11px;">
+                        <button onclick="console.log('selectWeapon available:', typeof window.selectWeapon); console.log('startGame available:', typeof window.startGame);" style="padding: 5px; background: #555; color: white; border: 1px solid #777; font-size: 10px;">Debug: Check Functions</button>
+                    </div>
                 </div>
 
             </div>
