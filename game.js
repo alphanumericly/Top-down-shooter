@@ -4401,6 +4401,9 @@ function initializeGame() {
     
     // Add event listeners as backup to onclick
     setTimeout(() => {
+        console.log('Setting up weapon selection...');
+        
+        // Setup original weapon cards
         const weaponCards = document.querySelectorAll('.weapon-card');
         console.log('Found weapon cards:', weaponCards.length);
         
@@ -4408,24 +4411,52 @@ function initializeGame() {
             const weapons = ['sword', 'bow', 'staff', 'cannon'];
             const weapon = weapons[index];
             
-            // Remove existing listeners first
-            card.replaceWith(card.cloneNode(true));
-            const newCard = document.querySelectorAll('.weapon-card')[index];
-            
-            newCard.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('Card clicked for weapon:', weapon);
-                selectWeapon(weapon);
-            });
-            
-            // Also add mousedown as backup
-            newCard.addEventListener('mousedown', (e) => {
-                e.preventDefault();
-                console.log('Card mousedown for weapon:', weapon);
-                selectWeapon(weapon);
+            // Add multiple event types for better compatibility
+            ['click', 'mousedown', 'touchstart'].forEach(eventType => {
+                card.addEventListener(eventType, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log(`${eventType} on card for weapon:`, weapon);
+                    selectWeapon(weapon);
+                }, { passive: false });
             });
         });
+        
+        // Setup fallback buttons with IDs
+        const fallbackButtons = {
+            'fallback-sword': 'sword',
+            'fallback-bow': 'bow', 
+            'fallback-staff': 'staff',
+            'fallback-cannon': 'cannon'
+        };
+        
+        Object.entries(fallbackButtons).forEach(([buttonId, weapon]) => {
+            const button = document.getElementById(buttonId);
+            if (button) {
+                console.log('Setting up fallback button:', buttonId, weapon);
+                
+                ['click', 'mousedown', 'touchstart'].forEach(eventType => {
+                    button.addEventListener(eventType, (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log(`Fallback ${eventType} for weapon:`, weapon);
+                        
+                        // Highlight the selected button
+                        Object.keys(fallbackButtons).forEach(id => {
+                            const btn = document.getElementById(id);
+                            if (btn) btn.style.background = '#444';
+                        });
+                        button.style.background = '#006600';
+                        
+                        selectWeapon(weapon);
+                    }, { passive: false });
+                });
+            } else {
+                console.warn('Fallback button not found:', buttonId);
+            }
+        });
+        
+        console.log('Weapon selection setup complete');
     }, 100);
 }
 
@@ -4443,4 +4474,33 @@ window.testWeaponSelection = function() {
     console.log('Testing weapon selection...');
     console.log('selectWeapon function available:', typeof window.selectWeapon);
     selectWeapon('bow');
+};
+
+// Manual weapon selection functions for console use
+window.selectSword = () => selectWeapon('sword');
+window.selectBow = () => selectWeapon('bow');
+window.selectStaff = () => selectWeapon('staff');
+window.selectCannon = () => selectWeapon('cannon');
+
+// Emergency start function if everything else fails
+window.emergencyStart = function(weaponType = 'bow') {
+    console.log('Emergency start with weapon:', weaponType);
+    selectedWeapon = weaponType;
+    
+    // Force start the game
+    gameRunning = true;
+    document.getElementById('startScreen').classList.add('hidden');
+    document.getElementById('statsPanel').style.display = 'block';
+    
+    // Initialize player with selected weapon
+    const weapon = weaponTypes[weaponType];
+    player.weapon = weaponType;
+    player.damage = weapon.damage;
+    player.fireRate = weapon.fireRate;
+    player.range = weapon.range;
+    
+    updateStatsPanel();
+    gameLoop();
+    
+    console.log('Game started with emergency method!');
 }; 
